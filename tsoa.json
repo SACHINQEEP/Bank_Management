@@ -1,0 +1,27 @@
+{
+  "entryFile": "src/index.ts",
+  "noImplicitAdditionalProperties": "throw-on-extras",
+  "ignore": ["*/node_modules/*"],
+  "spec": {
+    "outputDirectory": "public",
+    "basePath": "/",
+    "securityDefinitions": {
+      "authorization": {
+        "type": "http",
+        "scheme": "bearer",
+        "name": "authorization",
+        "in": "header"
+        
+      }
+    },
+    "yaml": true,
+    "specVersion": 3
+  },
+  "routes": {
+    "basePath": "/",
+    "routesDir": "src/routes",
+    "entryFile": "src/index.ts",
+    "middleware": "express",
+    "authenticationModule": "src/middlewares/authentication.ts"
+  }
+}
