@@ -1,5 +1,11 @@
-export default function  userAccount(fullname: string, email:string, accounNumber:string, branch: string) {
-return `
+export default function userAccount(
+  fullname: string,
+  email: string,
+  accounNumber: string,
+  branch: string
+) {
+  return `
+
     <h1>Dear ${fullname}</h>
     <p>Thank you to choosing our Bank Kinldy find the accound Details given below</p>
 
@@ -10,5 +16,5 @@ return `
 
     <p>Regards</p>
     <p>Bank</p>
-`
+`;
 }

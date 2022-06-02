@@ -16,7 +16,6 @@ CoustomerRouter.post("/signup", async (req, res) => {
       message: "You have Successfully registered",
       data: responce,
     });
-    
   } catch (err) {
     return res.status(400).json({
       status: "Fail",

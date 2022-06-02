@@ -28,7 +28,7 @@ export async function sendMail(
     from: "Sachin Patel <patelsachinsp269@gmail.com>",
     to: receiverEmail,
     subject: subject,
-    text: html,
+    html: html,
   };
 
   await transporter.sendMail(mailOptions);
@@ -37,7 +37,7 @@ export async function sendMail(
 // export const rendomOTP = Math.floor(Math.random() * 9999 + 1);
 
 export function randomotp(): string {
-  return  Math.floor(10000 + Math.random() * 90000) + ""
+  return Math.floor(10000 + Math.random() * 90000) + "";
 }
 
 // export const hashPassword =  argon.hash("password");
