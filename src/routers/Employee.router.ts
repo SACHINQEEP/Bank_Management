@@ -47,7 +47,23 @@ EmployeeRouter.post("/add-account", checkJWTEM, async (req, res) => {
 
     res.status(200).json({
       status: "Success",
-      message: "Account succesfully created!!.",
+      data: responce,
+    });
+  } catch (err) {
+    return res.status(400).json({
+      status: "Fail",
+      message: err,
+    });
+  }
+});
+
+
+EmployeeRouter.post("/verify-otp", checkJWTEM, async (req, res) => {
+  try {
+    const responce = await controller.verifyOTP(req.body);
+
+   return res.status(200).json({
+      status: "Success",
       data: responce,
     });
   } catch (err) {

@@ -45,4 +45,9 @@ export class BaseEntry extends BaseEntity {
     default: () => "NOW()",
   })
   Update_At: Date;
+
+  @Column({
+    nullable: true
+  })
+  email_verified: boolean
 }

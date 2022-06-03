@@ -23,7 +23,7 @@ export default class EmailService implements Receive {
                break;
            case Subject.UserAccount: 
            emailSubject = "Account Created"
-           emailHtml = userAccount(data.fullname, data.email, data.accountNumber, data.branch)
+           emailHtml = userAccount(data.name, data.email, data.account_number)
                break;
        }
 
