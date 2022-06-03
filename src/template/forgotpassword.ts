@@ -1,3 +1,3 @@
-export default function forgotpassword(otp: string){
-    return `<a link: href="#"> Your Forgot Password Link is ${otp}</a>`
+export default function forgotpassword(otp: string) {
+  return `<a Link: href=${process.env.FORGOTPASSWORD}>${process.env.FORGOTPASSWORD}${otp}</a>`;
 }
