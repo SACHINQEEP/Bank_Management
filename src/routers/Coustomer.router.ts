@@ -16,6 +16,7 @@ CoustomerRouter.post("/signup", async (req, res) => {
       message: "You have Successfully registered",
       data: responce,
     });
+    
   } catch (err) {
     return res.status(400).json({
       status: "Fail",
@@ -64,6 +65,54 @@ CoustomerRouter.post("/transection", checkJWTCS, async (req, res) => {
     return res.status(200).json({
       status: "Success",
       message: "Transection Details",
+      data: responce,
+    });
+  } catch (err) {
+    return res.status(400).json({
+      status: "Fail",
+      message: err.message,
+    });
+  }
+});
+
+CoustomerRouter.post("/verify-otp", checkJWTCS, async (req, res) => {
+  try {
+    const responce = await controller.verifyEmail(req.body);
+
+    return res.status(200).json({
+      status: "Success",
+      data: responce,
+    });
+  } catch (err) {
+    return res.status(400).json({
+      status: "Fail",
+      message: err.message,
+    });
+  }
+});
+
+CoustomerRouter.post("/change-password",  async (req, res) => {
+  try {
+    const responce = await controller.changePassword(req.body);
+
+    return res.status(200).json({
+      status: "Success",
+      data: responce,
+    });
+  } catch (err) {
+    return res.status(400).json({
+      status: "Fail",
+      message: err.message,
+    });
+  }
+});
+
+CoustomerRouter.post("/forgot-password",  async (req, res) => {
+  try {
+    const responce = await controller.forgotPassword(req.body);
+
+    return res.status(200).json({
+      status: "Success",
       data: responce,
     });
   } catch (err) {

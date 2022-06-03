@@ -88,6 +88,8 @@ components:
                     type: string
                 password:
                     type: string
+                otp:
+                    type: string
                 branch_id:
                     type: string
                 account_number:
@@ -95,6 +97,8 @@ components:
                 Update_At:
                     type: string
                     format: date-time
+                email_verified:
+                    type: boolean
                 account_id:
                     $ref: '#/components/schemas/Accounts'
                 transection_id:
@@ -107,9 +111,11 @@ components:
                 - address
                 - phone
                 - email
+                - otp
                 - branch_id
                 - account_number
                 - Update_At
+                - email_verified
                 - account_id
                 - transection_id
             type: object
@@ -178,6 +184,15 @@ components:
                 - Update_At
             type: object
             additionalProperties: false
+        VerifyOTP:
+            description: 'OTP: 2020'
+            properties:
+                otp:
+                    type: string
+            required:
+                - otp
+            type: object
+            additionalProperties: false
         LoginPayload:
             description: "email: \"patelsachinsp269@gmail.com\"\r\npassword: \"sach123\""
             properties:
@@ -188,6 +203,40 @@ components:
             required:
                 - email
                 - password
+            type: object
+            additionalProperties: false
+        ForgotPassword:
+            properties:
+                email:
+                    type: string
+            required:
+                - email
+            type: object
+            additionalProperties: false
+        ChangeFor:
+            enum:
+                - ChangePassword
+                - ForgotPassword
+            type: string
+        ChangePassword:
+            properties:
+                id:
+                    type: number
+                    format: double
+                For:
+                    $ref: '#/components/schemas/ChangeFor'
+                oldPassword:
+                    type: string
+                otp:
+                    type: string
+                newPassword:
+                    type: string
+            required:
+                - id
+                - For
+                - oldPassword
+                - otp
+                - newPassword
             type: object
             additionalProperties: false
         IUser:
@@ -230,6 +279,8 @@ components:
                     type: string
                 password:
                     type: string
+                otp:
+                    type: string
                 branch_id:
                     type: string
                 account_number:
@@ -237,6 +288,8 @@ components:
                 Update_At:
                     type: string
                     format: date-time
+                email_verified:
+                    type: boolean
                 department:
                     type: string
                 department_id:
@@ -247,9 +300,11 @@ components:
                 - address
                 - phone
                 - email
+                - otp
                 - branch_id
                 - account_number
                 - Update_At
+                - email_verified
                 - department
                 - department_id
             type: object
@@ -368,6 +423,28 @@ paths:
                     application/json:
                         schema:
                             $ref: '#/components/schemas/UserRequest'
+    /customer/verify-otp:
+        post:
+            operationId: VerifyEmail
+            responses:
+                '200':
+                    description: Ok
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/ICustomer'
+            tags:
+                - Customer
+            security:
+                -
+                    authorization: []
+            parameters: []
+            requestBody:
+                required: true
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/VerifyOTP'
     /customer/login:
         post:
             operationId: Login
@@ -388,6 +465,46 @@ paths:
                     application/json:
                         schema:
                             $ref: '#/components/schemas/LoginPayload'
+    /customer/forgot-password:
+        post:
+            operationId: ForgotPassword
+            responses:
+                '200':
+                    description: Ok
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/ICustomer'
+            tags:
+                - Customer
+            security: []
+            parameters: []
+            requestBody:
+                required: true
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/ForgotPassword'
+    /customer/change-password:
+        post:
+            operationId: ChangePassword
+            responses:
+                '200':
+                    description: Ok
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/ICustomer'
+            tags:
+                - Customer
+            security: []
+            parameters: []
+            requestBody:
+                required: true
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/ChangePassword'
     /customer/get-user-details:
         post:
             operationId: GetUserDetails
@@ -475,6 +592,28 @@ paths:
                     application/json:
                         schema:
                             $ref: '#/components/schemas/EmployeePayload'
+    /employee/verify-otp:
+        post:
+            operationId: VerifyOTP
+            responses:
+                '200':
+                    description: Ok
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/Employees'
+            tags:
+                - Employee
+            security:
+                -
+                    authorization: []
+            parameters: []
+            requestBody:
+                required: true
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/VerifyOTP'
     /employee/login:
         post:
             operationId: Login
