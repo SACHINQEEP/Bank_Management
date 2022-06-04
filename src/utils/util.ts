@@ -2,29 +2,23 @@ import * as jwt from "jsonwebtoken";
 import * as nodemailer from "nodemailer";
 import { google } from "googleapis";
 import * as argon from "argon2";
+import service from "../config/app_config";
 
 export const jwtWebToken = function (id: any): string {
-  const token = jwt.sign({ id }, process.env.SECRATE_KEY, {
-    expiresIn: "1h",
+  const token = jwt.sign({ id }, service.token_secret_key, {
+    expiresIn: service.expire_in,
   });
 
   return token;
 };
 
-const ClientId =
-  "863393577984-dhmcdnl68p39i8sjb3u4bunaavaceh06.apps.googleusercontent.com";
-const ClientSecret = "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";
-const Redirect_url = "https://developers.google.com/oauthplayground";
-const Refresh_token =
-  "1//04vlU43GmNVzlCgYIARAAGAQSNwF-L9IrmSJgmpNv4PXJeWzA0S-BqPAER8GovzZrF7jAqB3zoSt6Nscatr2RWzQnkGcplL9EUXI";
-
 const oAuth2Client = new google.auth.OAuth2(
-  ClientId,
-  ClientSecret,
-  Redirect_url
+  service.client_id,
+  service.client_secret,
+  service.redirect_url
 );
 
-oAuth2Client.setCredentials({ refresh_token: Refresh_token });
+oAuth2Client.setCredentials({ refresh_token: service.refresh_token });
 const AccessToken: any = oAuth2Client.getAccessToken();
 
 export async function sendMail(
@@ -39,9 +33,9 @@ export async function sendMail(
     auth: {
       type: "OAuth2",
       user: "patelsachinsp269@gmail.com",
-      clientId: ClientId,
-      clientSecret: ClientSecret,
-      refreshToken: Refresh_token,
+      clientId: service.client_id,
+      clientSecret: service.client_secret,
+      refreshToken: service.refresh_token,
       accessToken: await AccessToken,
 
       // user: "elody.kassulke23@ethereal.email",

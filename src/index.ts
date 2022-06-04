@@ -5,6 +5,8 @@ import * as morgan from "morgan";
 import * as env from "dotenv";
 import router from "./routers/index";
 import * as swaggerUi from "swagger-ui-express";
+import service from "./config/app_config";
+env.config();
 
 const app = express();
 app.use(express.json());
@@ -24,8 +26,6 @@ app.use(
 );
 
 app.use(cors);
-
-env.config();
 
 AppDataSource.initialize()
   .then(async () => {
@@ -58,5 +58,5 @@ app.use(
   }
 );
 
-const port = process.env.PORT || 8000;
+const port = service.port;
 app.listen(port, () => console.log(`Server listed on port ${port}`));
