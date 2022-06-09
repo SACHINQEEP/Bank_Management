@@ -99,6 +99,8 @@ components:
                     format: date-time
                 email_verified:
                     type: boolean
+                account_pincode:
+                    type: string
                 account_id:
                     $ref: '#/components/schemas/Accounts'
                 transection_id:
@@ -116,6 +118,7 @@ components:
                 - account_number
                 - Update_At
                 - email_verified
+                - account_pincode
                 - account_id
                 - transection_id
             type: object
@@ -220,9 +223,8 @@ components:
             type: string
         ChangePassword:
             properties:
-                id:
-                    type: number
-                    format: double
+                email:
+                    type: string
                 For:
                     $ref: '#/components/schemas/ChangeFor'
                 oldPassword:
@@ -232,7 +234,7 @@ components:
                 newPassword:
                     type: string
             required:
-                - id
+                - email
                 - For
                 - oldPassword
                 - otp
@@ -246,6 +248,18 @@ components:
                     format: double
             required:
                 - id
+            type: object
+            additionalProperties: false
+        AccountOTP:
+            properties:
+                id:
+                    type: number
+                    format: double
+                account_pincode:
+                    type: string
+            required:
+                - id
+                - account_pincode
             type: object
             additionalProperties: false
         Department:
@@ -551,6 +565,28 @@ paths:
                     application/json:
                         schema:
                             $ref: '#/components/schemas/IUser'
+    /customer/create-account-pincode:
+        post:
+            operationId: CreateAccountPincode
+            responses:
+                '200':
+                    description: Ok
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/Customer'
+            tags:
+                - Customer
+            security:
+                -
+                    authorization: []
+            parameters: []
+            requestBody:
+                required: true
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/AccountOTP'
     /bank-department:
         post:
             operationId: AddDepartment

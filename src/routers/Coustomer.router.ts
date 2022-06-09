@@ -16,7 +16,6 @@ CoustomerRouter.post("/signup", async (req, res) => {
       message: "You have Successfully registered",
       data: responce,
     });
-    
   } catch (err) {
     return res.status(400).json({
       status: "Fail",
@@ -91,7 +90,7 @@ CoustomerRouter.post("/verify-otp", checkJWTCS, async (req, res) => {
   }
 });
 
-CoustomerRouter.post("/change-password",  async (req, res) => {
+CoustomerRouter.post("/change-password", async (req, res) => {
   try {
     const responce = await controller.changePassword(req.body);
 
@@ -107,7 +106,7 @@ CoustomerRouter.post("/change-password",  async (req, res) => {
   }
 });
 
-CoustomerRouter.post("/forgot-password",  async (req, res) => {
+CoustomerRouter.post("/forgot-password", async (req, res) => {
   try {
     const responce = await controller.forgotPassword(req.body);
 
@@ -122,5 +121,25 @@ CoustomerRouter.post("/forgot-password",  async (req, res) => {
     });
   }
 });
+
+CoustomerRouter.post(
+  "/create-account-pincode",
+  checkJWTCS,
+  async (req, res) => {
+    try {
+      const responce = await controller.createAccountPincode(req.body);
+
+      return res.status(200).json({
+        status: "Success",
+        data: responce,
+      });
+    } catch (err) {
+      return res.status(400).json({
+        status: "Fail",
+        message: err.message,
+      });
+    }
+  }
+);
 
 export default CoustomerRouter;

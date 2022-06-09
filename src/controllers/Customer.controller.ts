@@ -1,5 +1,6 @@
 import { Body, Post, Route, Security, Tags } from "tsoa";
 import { Customer } from "../entity/Customer";
+import { AccountOTP } from "../interface/Request/AccountOTP";
 import { ChangePassword } from "../interface/Request/ChangePassoword";
 import { ForgotPassword } from "../interface/Request/ForgotPassword";
 import IUser from "../interface/Request/IUser";
@@ -25,8 +26,8 @@ export default class CustomerController {
 
   @Security("authorization")
   @Post("/verify-otp")
-  public async verifyEmail(@Body() body: VerifyOTP):Promise<ICustomer>{
-    return this.coustomerservic.verifyCustomer(body)
+  public async verifyEmail(@Body() body: VerifyOTP): Promise<ICustomer> {
+    return this.coustomerservic.verifyCustomer(body);
   }
 
   @Post("/login")
@@ -34,15 +35,18 @@ export default class CustomerController {
     return this.coustomerservic.getCustomer(body);
   }
 
-
   @Post("/forgot-password")
-  public async forgotPassword(@Body() body: ForgotPassword):Promise<ICustomer>{
-    return this.coustomerservic.forgotPassword(body)
+  public async forgotPassword(
+    @Body() body: ForgotPassword
+  ): Promise<ICustomer> {
+    return this.coustomerservic.forgotPassword(body);
   }
-  
+
   @Post("/change-password")
-  public async changePassword(@Body() body: ChangePassword):Promise<ICustomer>{
-    return this.coustomerservic.changePassword(body)
+  public async changePassword(
+    @Body() body: ChangePassword
+  ): Promise<ICustomer> {
+    return this.coustomerservic.changePassword(body);
   }
 
   @Security("authorization")
@@ -57,5 +61,13 @@ export default class CustomerController {
     @Body() body: IUser
   ): Promise<Customer | any> {
     return this.coustomerservic.checkTransection(body);
+  }
+
+  @Security("authorization")
+  @Post("/create-account-pincode")
+  public async createAccountPincode(
+    @Body() body: AccountOTP
+  ): Promise<Customer> {
+    return this.coustomerservic.createAccountPassword(body);
   }
 }

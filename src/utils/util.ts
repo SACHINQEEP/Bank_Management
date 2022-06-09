@@ -44,7 +44,7 @@ export async function sendMail(
   });
 
   const mailOptions = {
-    from: "Sachin Patel <patelsachinsp269@gmail.com>",
+    from: "Bank of Management <patelsachinsp269@gmail.com>",
     to: receiverEmail,
     subject: subject,
     html: html,
