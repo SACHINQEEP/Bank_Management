@@ -1,29 +1,29 @@
-import { Expose } from "class-transformer";
+import { Expose } from 'class-transformer'
 import {
   IsDefined,
   IsNumber,
   IsOptional,
   IsString,
-  ValidateIf,
-} from "class-validator";
-import { ChangeFor } from "../../eumn/ChangePassword";
+  ValidateIf
+} from 'class-validator'
+import { ChangeFor } from '../../eumn/ChangePassword'
 
 export class ChangePassword {
-  @Expose() @IsDefined() @IsString() email: string;
+  @Expose() @IsDefined() @IsString() email: string
 
-  @Expose() @IsString() @IsDefined() For: ChangeFor;
+  @Expose() @IsString() @IsDefined() For: ChangeFor
 
-  @ValidateIf((o) => o.For == ChangeFor.ForgotPassword)
+  @ValidateIf(o => o.For == ChangeFor.ForgotPassword)
   @Expose()
   @IsString()
   @IsOptional()
-  oldPassword: string;
+  oldPassword: string
 
-  @ValidateIf((o) => o.For == ChangeFor.ChangePassword)
+  @ValidateIf(o => o.For == ChangeFor.ChangePassword)
   @Expose()
   @IsOptional()
   @IsString()
-  otp: string;
+  otp: string
 
-  @Expose() @IsString() @IsDefined() newPassword: string;
+  @Expose() @IsString() @IsDefined() newPassword: string
 }

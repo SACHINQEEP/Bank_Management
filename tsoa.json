@@ -11,7 +11,6 @@
         "scheme": "bearer",
         "name": "authorization",
         "in": "header"
-        
       }
     },
     "yaml": true,
@@ -19,9 +18,14 @@
   },
   "routes": {
     "basePath": "/",
-    "routesDir": "src/routes",
+    "routesDir": "src/controllers",
     "entryFile": "src/index.ts",
     "middleware": "express",
-    "authenticationModule": "src/middlewares/authentication.ts"
+    "authenticationModule": "src/middlewares/authentication.ts",
+    "controllerPathGlobs": [
+      "src/controllers/*",
+      "./src/**/*",
+      "src/controllers/**/*..ts"
+    ]
   }
 }

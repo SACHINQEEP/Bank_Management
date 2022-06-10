@@ -364,6 +364,11 @@ components:
                 - department_id
             type: object
             additionalProperties: false
+        Account_type:
+            enum:
+                - saving
+                - current
+            type: string
         AccountPayload:
             properties:
                 account_number:
@@ -373,7 +378,7 @@ components:
                 customer_id:
                     type: string
                 account_type:
-                    type: string
+                    $ref: '#/components/schemas/Account_type'
                 account_statu:
                     type: string
             required:
