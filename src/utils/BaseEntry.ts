@@ -1,50 +1,55 @@
-import { BaseEntity, Column, Entity, PrimaryGeneratedColumn } from "typeorm";
-import * as bcrypt from "bcrypt";
-import { IsEmail } from "class-validator";
+import { BaseEntity, Column, Entity, PrimaryGeneratedColumn } from 'typeorm'
+import * as bcrypt from 'bcrypt'
+import { IsEmail } from 'class-validator'
 
 @Entity()
 export class BaseEntry extends BaseEntity {
   @PrimaryGeneratedColumn()
-  id: number;
+  id: number
 
   @Column()
-  name: string;
+  name: string
 
   @Column()
-  address: string;
+  address: string
 
   @Column({
-    length: 10,
+    length: 10
   })
-  phone: string;
+  phone: string
 
   @Column({
-    unique: true,
+    unique: true
   })
   @IsEmail()
-  email: string;
+  email: string
 
   @Column()
-  password?: string;
+  password?: string
+
+  @Column({
+    default: 'default.svg'
+  })
+  avatar: string
 
   @Column({
     default: null
   })
-  otp: string;
+  otp: string
 
   @Column()
-  branch_id: string;
+  branch_id: string
 
   @Column({
-    nullable: true,
+    nullable: true
   })
-  account_number: string;
+  account_number: string
 
   @Column({
-    type: "datetime",
-    default: () => "NOW()",
+    type: 'datetime',
+    default: () => 'NOW()'
   })
-  Update_At: Date;
+  Update_At: Date
 
   @Column({
     nullable: true

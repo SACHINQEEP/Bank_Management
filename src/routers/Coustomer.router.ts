@@ -3,6 +3,7 @@ import CustomerController from '../controllers/Customer.controller'
 import { Customer } from '../entity/Customer'
 import { checkJWTCS } from '../middleware/checkJWT'
 import CoustomerService from '../services/Coustomer.service'
+import { upladUserPhoto } from '../utils/multer'
 
 const CoustomerRouter = express.Router()
 
@@ -129,6 +130,29 @@ CoustomerRouter.post(
   async (req, res) => {
     try {
       const responce = await controller.createAccountPincode(req.body)
+
+      return res.status(200).json({
+        status: 'Success',
+        data: responce
+      })
+    } catch (err) {
+      return res.status(400).json({
+        status: 'Fail',
+        message: err.message
+      })
+    }
+  }
+)
+
+CoustomerRouter.post(
+  '/update-user-profile/:id',
+  upladUserPhoto,
+  async (req, res) => {
+    try {
+      const responce = await controller.updateUserProfile(
+        Number(req.params.id),
+        req.body
+      )
 
       return res.status(200).json({
         status: 'Success',

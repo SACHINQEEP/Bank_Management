@@ -88,6 +88,8 @@ components:
                     type: string
                 password:
                     type: string
+                avatar:
+                    type: string
                 otp:
                     type: string
                 branch_id:
@@ -113,6 +115,7 @@ components:
                 - address
                 - phone
                 - email
+                - avatar
                 - otp
                 - branch_id
                 - account_number
@@ -293,6 +296,8 @@ components:
                     type: string
                 password:
                     type: string
+                avatar:
+                    type: string
                 otp:
                     type: string
                 branch_id:
@@ -314,6 +319,7 @@ components:
                 - address
                 - phone
                 - email
+                - avatar
                 - otp
                 - branch_id
                 - account_number
@@ -592,6 +598,37 @@ paths:
                     application/json:
                         schema:
                             $ref: '#/components/schemas/AccountOTP'
+    '/customer/update-user-profile/{id}':
+        post:
+            operationId: UpdateUserProfile
+            responses:
+                '200':
+                    description: Ok
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/Customer'
+            tags:
+                - Customer
+            security: []
+            parameters:
+                -
+                    in: path
+                    name: id
+                    required: true
+                    schema:
+                        format: double
+                        type: number
+            requestBody:
+                required: false
+                content:
+                    multipart/form-data:
+                        schema:
+                            type: object
+                            properties:
+                                file:
+                                    type: string
+                                    format: binary
     /bank-department:
         post:
             operationId: AddDepartment

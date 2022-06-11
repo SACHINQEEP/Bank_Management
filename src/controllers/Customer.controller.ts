@@ -1,4 +1,16 @@
-import { Body, Post, Route, Security, Tags } from 'tsoa'
+import {
+  Body,
+  File,
+  FormField,
+  Path,
+  Post,
+  Query,
+  Route,
+  Security,
+  Tags,
+  UploadedFile,
+  UploadedFiles
+} from 'tsoa'
 import { Customer } from '../entity/Customer'
 import { AccountOTP } from '../interface/Request/AccountOTP'
 import { ChangePassword } from '../interface/Request/ChangePassoword'
@@ -69,5 +81,13 @@ export default class CustomerController {
     @Body() body: AccountOTP
   ): Promise<Customer> {
     return this.coustomerservic.createAccountPassword(body)
+  }
+
+  @Post('/update-user-profile/{id}')
+  public async updateUserProfile (
+    @Path() id?: number,
+    @UploadedFile() file?: Express.Multer.File
+  ): Promise<Customer> {
+    return this.coustomerservic.updateCustomerProfile({ id, file })
   }
 }
