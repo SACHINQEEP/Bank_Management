@@ -149,10 +149,11 @@ CoustomerRouter.post(
   upladUserPhoto,
   async (req, res) => {
     try {
-      const responce = await controller.updateUserProfile(
-        Number(req.params.id),
-        req.body
-      )
+      const param: any = req.params.id
+      const file: any = req.file
+      const responce = await controller.updateUserProfile(param, file)
+
+      console.log(req.file)
 
       return res.status(200).json({
         status: 'Success',
@@ -166,5 +167,21 @@ CoustomerRouter.post(
     }
   }
 )
+
+CoustomerRouter.post('/create-transetion', async (req, res) => {
+  try {
+    let responce = await controller.createPayment(req.body)
+
+    return res.status(200).json({
+      status: 'Success',
+      data: responce
+    })
+  } catch (err) {
+    return res.status(400).json({
+      status: 'Fail',
+      message: err.message
+    })
+  }
+})
 
 export default CoustomerRouter

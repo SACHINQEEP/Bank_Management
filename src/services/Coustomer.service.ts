@@ -1,6 +1,9 @@
 import { Like, UpdateResult } from 'typeorm'
 import { Customer } from '../entity/Customer'
+import { Transection } from '../entity/Transection'
 import { ChangeFor } from '../eumn/ChangePassword'
+import { Payment_type } from '../eumn/PaymentType'
+import { TransetionType } from '../eumn/TransectionType'
 import { Event } from '../events/Event'
 import EmailService from '../events/MailService'
 import { Subject } from '../events/Subject'
@@ -9,6 +12,7 @@ import { ChangePassword } from '../interface/Request/ChangePassoword'
 import { ForgotPassword } from '../interface/Request/ForgotPassword'
 import IUser from '../interface/Request/IUser'
 import { LoginPayload } from '../interface/Request/LoginPayload'
+import { Payment } from '../interface/Request/PaymentPayload'
 import { UpdateProfile } from '../interface/Request/updateUserProfile'
 import { UserRequest } from '../interface/Request/UserRequest'
 import { VerifyOTP } from '../interface/Request/VerifyOTP'
@@ -21,6 +25,7 @@ import {
   getTransection,
   updateCustomer
 } from '../repository/Customer.repository'
+import { updateTransetion } from '../repository/Transection.repository'
 import {
   hasPassword,
   jwtWebToken,
@@ -220,5 +225,54 @@ export default class CoustomerService {
     )
 
     return user
+  }
+
+  public async createPayment (body: Payment): Promise<Transection> {
+    let receiverAccountNumber: any
+    let transetion: any = []
+
+    let user = await getCustomer({ id: body.id })
+    console.log(user)
+
+    if (!user) throw new AppError(400, 'User not Found')
+
+    if (user) {
+      if (user.total_amount > 0) {
+        if (body.For == TransetionType.UPI) {
+          receiverAccountNumber = await getCustomer({
+            where: {
+              account_number: body.mobile_Account_number,
+              phone: body.mobile_Account_number
+            }
+          })
+
+          const verify = await verifyPassword(
+            user.account_pincode,
+            body.pin_code
+          )
+
+          if (!verify) throw new AppError(400, 'Invalid PinCode')
+
+          if (!receiverAccountNumber)
+            throw new AppError(400, 'Not a valid Account or phone number')
+
+          if (body.amount >= 1) {
+            let paymentTransetion = await updateTransetion(
+              { customer_id: body.id },
+              {
+                createdAt: new Date(),
+                recever_customer_account_number: body.mobile_Account_number,
+                recever_customer_mobile_number: body.mobile_Account_number,
+                amount: body.amount
+              }
+            )
+            transetion.push(paymentTransetion)
+          }
+        }
+      } else {
+        throw new AppError(400, 'insufficient funds')
+      }
+    }
+    return transetion
   }
 }

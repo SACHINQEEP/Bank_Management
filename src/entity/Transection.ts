@@ -5,43 +5,64 @@ import {
   Index,
   JoinColumn,
   ManyToOne,
-  PrimaryGeneratedColumn,
-} from "typeorm";
-import { Payment_type } from "../eumn/PaymentType";
-import { Customer } from "./Customer";
+  PrimaryGeneratedColumn
+} from 'typeorm'
+import { Payment_type } from '../eumn/PaymentType'
+import { TransetionType } from '../eumn/TransectionType'
+import { Customer } from './Customer'
 
 @Entity()
 export class Transection extends BaseEntity {
   @PrimaryGeneratedColumn()
-  id: number;
+  id: number
 
   @Column()
-  account_number: string;
+  account_number: string
+
+  @Column()
+  amount: number
 
   @Column({
-    type: "datetime",
-    default: () => "NOW()",
+    type: 'datetime',
+    default: () => 'NOW()'
   })
   @Index()
-  createdAt: string;
+  createdAt: string
 
   @Column({
-    type: "enum",
+    type: 'enum',
     enum: Payment_type,
-    default: null,
+    default: Payment_type.DEPOSIT
   })
-  payment_type: string;
+  payment_type: string
 
   @Column({
     nullable: true,
-    unique: true,
+    unique: true
   })
-  loan_id: string;
+  loan_id: string
 
-  @Column()
-  transection_type: string;
+  @Column({
+    type: 'enum',
+    enum: TransetionType,
+    default: TransetionType.UPI
+  })
+  transection_type: string
 
-  @ManyToOne(() => Customer, (customer) => customer.transection_id)
-  @JoinColumn({ name: "customer_id" })
-  customer_id: Customer;
+  @Column({
+    nullable: true
+  })
+  recever_customer_account_number: string
+
+  @Column({
+    nullable: true
+  })
+  recever_customer_mobile_number: string
+
+  @ManyToOne(
+    () => Customer,
+    customer => customer.transection_id
+  )
+  @JoinColumn({ name: 'customer_id' })
+  customer_id: Customer
 }

@@ -3,7 +3,7 @@ import AppError from '../middleware/AppError'
 
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
-    cb(null, '/temp/my-uploads')
+    cb(null, './temp/my-uploads/')
   },
 
   filename: function (req, file, cb) {
@@ -14,13 +14,13 @@ const storage = multer.diskStorage({
   }
 })
 
-// const multerFilter = (req, file, cb) => {
-//   if (file.mimetype.startWith('image')) {
-//     cb(null, true)
-//   } else {
-//     cb(new AppError(400, 'Please upload the image...'))
-//   }
-// }
+const multerFilter = (req, file, cb) => {
+  if (file.mimetype.startWith('image')) {
+    cb(null, true)
+  } else {
+    cb(new AppError(400, 'Please upload the image...'))
+  }
+}
 
 const upload = multer({ storage: storage })
 

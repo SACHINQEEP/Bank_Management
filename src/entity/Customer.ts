@@ -12,6 +12,9 @@ import { Transection } from './Transection'
 
 @Entity()
 export class Customer extends BaseEntry {
+  @Column({ nullable: true })
+  total_amount: number
+
   @Column({ default: null })
   account_pincode: string
 

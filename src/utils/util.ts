@@ -26,31 +26,36 @@ export async function sendMail (
   subject: string,
   html: string
 ) {
-  const transporter = nodemailer.createTransport({
-    service: 'gmail',
-    // host: "smtp.ethereal.email",
-    // port: 587,
-    auth: {
-      type: 'OAuth2',
-      user: 'patelsachinsp269@gmail.com',
-      clientId: service.client_id,
-      clientSecret: service.client_secret,
-      refreshToken: service.refresh_token,
-      accessToken: await AccessToken
+  try {
+    const transporter = nodemailer.createTransport({
+      service: 'gmail',
+      // host: "smtp.ethereal.email",
+      // port: 587,
+      auth: {
+        type: 'OAuth2',
+        user: 'patelsachinsp269@gmail.com',
+        clientId: service.client_id,
+        clientSecret: service.client_secret,
+        refreshToken: service.refresh_token,
+        accessToken: await AccessToken
 
-      // user: "elody.kassulke23@ethereal.email",
-      // pass: "5bshKGjHRKHsyzFBue",
+        // user: "elody.kassulke23@ethereal.email",
+        // pass: "5bshKGjHRKHsyzFBue",
+      }
+    })
+
+    const mailOptions = {
+      from: 'Bank of Management <patelsachinsp269@gmail.com>',
+      to: receiverEmail,
+      subject: subject,
+      html: html
     }
-  })
 
-  const mailOptions = {
-    from: 'Bank of Management <patelsachinsp269@gmail.com>',
-    to: receiverEmail,
-    subject: subject,
-    html: html
+    await transporter.sendMail(mailOptions)
+  } catch (err) {
+    console.log(err)
+    console.log(err.message)
   }
-
-  await transporter.sendMail(mailOptions)
 }
 
 // export const rendomOTP = Math.floor(Math.random() * 9999 + 1);

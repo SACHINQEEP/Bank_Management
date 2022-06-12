@@ -1,15 +1,13 @@
 import {
   Body,
   File,
-  FormField,
   Path,
   Post,
-  Query,
+  Request,
   Route,
   Security,
   Tags,
-  UploadedFile,
-  UploadedFiles
+  UploadedFile
 } from 'tsoa'
 import { Customer } from '../entity/Customer'
 import { AccountOTP } from '../interface/Request/AccountOTP'
@@ -21,7 +19,9 @@ import { UserRequest } from '../interface/Request/UserRequest'
 import { VerifyOTP } from '../interface/Request/VerifyOTP'
 import { ICustomer } from '../interface/Responce/ICustomer'
 import CoustomerServic from '../services/Coustomer.service'
-
+import * as express from 'express'
+import { Payment } from '../interface/Request/PaymentPayload'
+import { Transection } from '../entity/Transection'
 @Route('/customer')
 @Tags('Customer')
 export default class CustomerController {
@@ -85,9 +85,15 @@ export default class CustomerController {
 
   @Post('/update-user-profile/{id}')
   public async updateUserProfile (
+    @Request() request: express.Request,
     @Path() id?: number,
     @UploadedFile() file?: Express.Multer.File
   ): Promise<Customer> {
     return this.coustomerservic.updateCustomerProfile({ id, file })
+  }
+
+  @Post('/create-transetion')
+  public async createPayment (@Body() body: Payment): Promise<Transection> {
+    return this.coustomerservic.createPayment(body)
   }
 }
