@@ -140,8 +140,6 @@ components:
                 amount:
                     type: number
                     format: double
-                createdAt:
-                    type: string
                 payment_type:
                     type: string
                 loan_id:
@@ -152,18 +150,20 @@ components:
                     type: string
                 recever_customer_mobile_number:
                     type: string
+                createdAt:
+                    type: string
                 customer_id:
                     $ref: '#/components/schemas/Customer'
             required:
                 - id
                 - account_number
                 - amount
-                - createdAt
                 - payment_type
                 - loan_id
                 - transection_type
                 - recever_customer_account_number
                 - recever_customer_mobile_number
+                - createdAt
                 - customer_id
             type: object
             additionalProperties: false
@@ -193,6 +193,9 @@ components:
                     type: string
                 branch_id:
                     type: string
+                total_amount:
+                    type: number
+                    format: double
                 Update_At: {}
             required:
                 - name
@@ -201,6 +204,7 @@ components:
                 - email
                 - password
                 - branch_id
+                - total_amount
                 - Update_At
             type: object
             additionalProperties: false
@@ -265,6 +269,34 @@ components:
                     format: double
             required:
                 - id
+            type: object
+            additionalProperties: false
+        ITransection:
+            properties:
+                id:
+                    type: number
+                    format: double
+                name:
+                    type: string
+                email:
+                    type: string
+                branch_id:
+                    type: string
+                account_number:
+                    type: string
+                total_amount:
+                    type: number
+                    format: double
+                transection_id:
+                    $ref: '#/components/schemas/Transection'
+            required:
+                - id
+                - name
+                - email
+                - branch_id
+                - account_number
+                - total_amount
+                - transection_id
             type: object
             additionalProperties: false
         AccountOTP:
@@ -613,9 +645,7 @@ paths:
                     content:
                         application/json:
                             schema:
-                                anyOf:
-                                    - {$ref: '#/components/schemas/Customer'}
-                                    - {}
+                                $ref: '#/components/schemas/ITransection'
             tags:
                 - Customer
             security:

@@ -5,6 +5,8 @@ function repo () {
   return AppDataSource.getRepository(Transection)
 }
 
+// .find({ select: excludeColumns(User, ['email']) });
+
 export const addTransection = async (body: object): Promise<Transection> => {
   return await repo()
     .create(body)
@@ -13,7 +15,7 @@ export const addTransection = async (body: object): Promise<Transection> => {
 
 export const getTransection = async (
   body: any
-): Promise<Array<Transection[] | number>> => {
+): Promise<Transection[] | any> => {
   return await repo().findAndCount({
     where: {
       id: body.id

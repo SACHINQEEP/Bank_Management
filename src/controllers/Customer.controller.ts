@@ -22,6 +22,7 @@ import CoustomerServic from '../services/Coustomer.service'
 import * as express from 'express'
 import { Payment } from '../interface/Request/PaymentPayload'
 import { Transection } from '../entity/Transection'
+import { ITransection } from '../interface/Responce/ITransection'
 @Route('/customer')
 @Tags('Customer')
 export default class CustomerController {
@@ -69,9 +70,7 @@ export default class CustomerController {
 
   @Security('authorization')
   @Post('/transection')
-  public async getUserTransection (
-    @Body() body: IUser
-  ): Promise<Customer | any> {
+  public async getUserTransection (@Body() body: IUser): Promise<ITransection> {
     return this.coustomerservic.checkTransection(body)
   }
 

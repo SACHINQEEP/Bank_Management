@@ -1,5 +1,5 @@
-import { Expose } from "class-transformer";
-import { IsDefined, IsOptional, IsString } from "class-validator";
+import { Expose } from 'class-transformer'
+import { IsDefined, IsNumber, IsOptional, IsString } from 'class-validator'
 
 /**
  * name: "sachin Patel"
@@ -12,17 +12,19 @@ import { IsDefined, IsOptional, IsString } from "class-validator";
  */
 
 export class UserRequest {
-  @Expose() @IsDefined() @IsString() name: string;
+  @Expose() @IsDefined() @IsString() name: string
 
-  @Expose() @IsDefined() @IsString() address: string;
+  @Expose() @IsDefined() @IsString() address: string
 
-  @Expose() @IsDefined() @IsString() phone: string;
+  @Expose() @IsDefined() @IsString() phone: string
 
-  @Expose() @IsDefined() @IsString() email: string;
+  @Expose() @IsDefined() @IsString() email: string
 
- @Expose() @IsDefined() @IsString() password: string;
+  @Expose() @IsDefined() @IsString() password: string
 
-  @Expose() @IsDefined() @IsString() branch_id: string;
+  @Expose() @IsDefined() @IsString() branch_id: string
 
-  @IsOptional() Update_At: any;
+  @Expose() @IsDefined() @IsNumber() total_amount: number
+
+  @IsOptional() Update_At: any
 }

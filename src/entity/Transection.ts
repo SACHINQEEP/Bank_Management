@@ -23,13 +23,6 @@ export class Transection extends BaseEntity {
   amount: number
 
   @Column({
-    type: 'datetime',
-    default: () => 'NOW()'
-  })
-  @Index()
-  createdAt: string
-
-  @Column({
     type: 'enum',
     enum: Payment_type,
     default: Payment_type.DEPOSIT
@@ -58,6 +51,13 @@ export class Transection extends BaseEntity {
     nullable: true
   })
   recever_customer_mobile_number: string
+
+  @Column({
+    type: 'datetime',
+    default: () => 'NOW()'
+  })
+  @Index()
+  createdAt: string
 
   @ManyToOne(
     () => Customer,
