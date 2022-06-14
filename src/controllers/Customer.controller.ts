@@ -70,7 +70,9 @@ export default class CustomerController {
 
   @Security('authorization')
   @Post('/transection')
-  public async getUserTransection (@Body() body: IUser): Promise<ITransection> {
+  public async getUserTransection (
+    @Body() body: IUser
+  ): Promise<[Array<Customer>, any]> {
     return this.coustomerservic.checkTransection(body)
   }
 

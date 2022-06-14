@@ -108,7 +108,9 @@ export default class CoustomerService {
     return user
   }
 
-  public async checkTransection (body: IUser): Promise<ITransection> {
+  public async checkTransection (
+    body: IUser
+  ): Promise<[Array<Customer>, number]> {
     let users = await getTransection(body)
     console.log(users)
 
