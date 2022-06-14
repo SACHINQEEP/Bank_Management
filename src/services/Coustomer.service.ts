@@ -231,45 +231,66 @@ export default class CoustomerService {
 
     let user = await getCustomer({ id: body.id })
 
+    let receiverUser = await getCustomer({
+      account_number: body.mobile_Account_number
+    })
+
     if (!user) throw new AppError(400, 'User not Found')
 
-    if (user) {
-      if (user.total_amount > 0) {
-        if (body.For == TransetionType.UPI) {
-          if (!user.total_amount) {
-            throw new AppError(400, 'insufficient funds')
-          }
+    if (user || user.total_amount >= 1) {
+      if (body.For == TransetionType.UPI) {
+        receiverAccountNumber = await getCustomer({
+          account_number: body.mobile_Account_number
+        })
 
-          receiverAccountNumber = await getCustomer({
-            account_number: body.mobile_Account_number
+        const verify = await verifyPassword(body.pin_code, user.account_pincode)
+
+        if (!verify) throw new AppError(400, 'Invalid PinCode')
+
+        if (!receiverAccountNumber)
+          throw new AppError(400, 'Not a valid Account or phone number')
+
+        let userAccount = user.account_number
+
+        if (body.amount >= 1) {
+          let add = await addTransection({
+            account_number: userAccount,
+            amount: body.amount,
+            payment_type: body.Type,
+            transection_type: body.For,
+            recever_customer_account_number: body.mobile_Account_number,
+            customer_id: body.id
           })
 
-          const verify = await verifyPassword(
-            body.pin_code,
-            user.account_pincode
-          )
+          let userAmount = user.total_amount
 
-          if (!verify) throw new AppError(400, 'Invalid PinCode')
-
-          if (!receiverAccountNumber)
-            throw new AppError(400, 'Not a valid Account or phone number')
-
-          let userAccount = user.account_number
-
-          if (body.amount >= 1) {
-            let add = await addTransection({
-              account_number: userAccount,
-              amount: body.amount,
-              payment_type: body.Type,
-              transection_type: body.For,
-              recever_customer_account_number: body.mobile_Account_number,
-              customer_id: body.id
-            })
-            transetion.push(add)
+          if (body.Type == Payment_type.CREDIT) {
+            let afterCredit = userAmount - body.amount
+            let receiverDeposit = receiverUser.total_amount + body.amount
+            await updateCustomer({ id: body.id }, { total_amount: afterCredit })
+            await updateCustomer(
+              { id: receiverUser.id },
+              { total_amount: receiverDeposit }
+            )
           }
+
+          if (body.Type == Payment_type.DEPOSIT) {
+            let afterDeposit = userAccount + body.amount
+            let receiverCredit = receiverUser.total_amount - body.amount
+            await updateCustomer(
+              { id: body.id },
+              { total_amount: afterDeposit }
+            )
+            await updateCustomer(
+              { id: receiverUser.id },
+              { total_amount: receiverCredit }
+            )
+          }
+          transetion.push(add)
         }
       }
-      console.log(transetion)
+    } else {
+      throw new AppError(400, 'insufficient funds')
     }
     return transetion
   }
