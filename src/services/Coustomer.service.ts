@@ -18,6 +18,7 @@ import { UserRequest } from '../interface/Request/UserRequest'
 import { VerifyOTP } from '../interface/Request/VerifyOTP'
 import { ICustomer } from '../interface/Responce/ICustomer'
 import { ITransection } from '../interface/Responce/ITransection'
+import createStripeCustomer from '../events/stripe'
 import AppError from '../middleware/AppError'
 import {
   addCustomer,
@@ -55,7 +56,15 @@ export default class CoustomerService {
 
     await mailService.receive(Event.EMAIL, Subject.UserSignup, user)
 
-    await updateCustomer({ id: user.id }, { otp: user.otp })
+    const stripeDataconnect = await createStripeCustomer(body.email)
+    console.log(stripeDataconnect.id)
+
+    await updateCustomer(
+      { id: user.id },
+      { otp: user.otp, stripe_id: stripeDataconnect.id }
+    )
+
+    user = await getCustomer({ id: user.id })
 
     const token = jwtWebToken({ id: user.id })
 
@@ -108,9 +117,7 @@ export default class CoustomerService {
     return user
   }
 
-  public async checkTransection (
-    body: IUser
-  ): Promise<[Array<Customer>, number]> {
+  public async checkTransection (body: IUser): Promise<[Customer[], any]> {
     let users = await getTransection(body)
     console.log(users)
 

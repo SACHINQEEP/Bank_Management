@@ -30,9 +30,7 @@ export const updateCustomer = async (
   return await repo().update({ ...user }, { ...body })
 }
 
-export const getTransection = async (
-  body: any
-): Promise<[Array<Customer>, number]> => {
+export const getTransection = async (body: any): Promise<[Customer[], any]> => {
   return repo().findAndCount({
     where: {
       id: body.id

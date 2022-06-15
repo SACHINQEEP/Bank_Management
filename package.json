@@ -35,6 +35,7 @@
     "mysql2": "^2.3.3",
     "nodemailer": "^6.7.5",
     "reflect-metadata": "^0.1.13",
+    "stripe": "^9.8.0",
     "swagger-ui-express": "^4.4.0",
     "tsoa": "^4.1.0",
     "typeorm": "0.3.6"

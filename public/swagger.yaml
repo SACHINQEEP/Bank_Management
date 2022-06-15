@@ -101,6 +101,8 @@ components:
                     format: date-time
                 email_verified:
                     type: boolean
+                stripe_id:
+                    type: string
                 total_amount:
                     type: number
                     format: double
@@ -124,6 +126,7 @@ components:
                 - account_number
                 - Update_At
                 - email_verified
+                - stripe_id
                 - total_amount
                 - account_pincode
                 - account_id
@@ -269,34 +272,6 @@ components:
                     format: double
             required:
                 - id
-            type: object
-            additionalProperties: false
-        ITransection:
-            properties:
-                id:
-                    type: number
-                    format: double
-                name:
-                    type: string
-                email:
-                    type: string
-                branch_id:
-                    type: string
-                account_number:
-                    type: string
-                total_amount:
-                    type: number
-                    format: double
-                transection_id:
-                    $ref: '#/components/schemas/Transection'
-            required:
-                - id
-                - name
-                - email
-                - branch_id
-                - account_number
-                - total_amount
-                - transection_id
             type: object
             additionalProperties: false
         AccountOTP:
@@ -645,7 +620,9 @@ paths:
                     content:
                         application/json:
                             schema:
-                                $ref: '#/components/schemas/ITransection'
+                                items:
+                                    $ref: '#/components/schemas/Customer'
+                                type: array
             tags:
                 - Customer
             security:
