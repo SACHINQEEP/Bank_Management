@@ -9,8 +9,9 @@ const stripe = new Stripe(service.stripe_key, {
 const createStripeCustomer = async function (data: any) {
   try {
     const account = await stripe.customers.create({
-      description: 'test User',
-      email: data
+      description: 'Customer Created',
+      email: data,
+      address: data
     })
     return account
   } catch (err) {

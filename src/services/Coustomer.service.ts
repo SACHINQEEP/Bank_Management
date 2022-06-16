@@ -1,4 +1,4 @@
-import { Like, UpdateResult } from 'typeorm'
+import { ILike, Like, UpdateResult } from 'typeorm'
 import { Customer } from '../entity/Customer'
 import { Transection } from '../entity/Transection'
 import { ChangeFor } from '../eumn/ChangePassword'
@@ -56,13 +56,13 @@ export default class CoustomerService {
 
     await mailService.receive(Event.EMAIL, Subject.UserSignup, user)
 
-    const stripeDataconnect = await createStripeCustomer(body.email)
-    console.log(stripeDataconnect.id)
+    // const stripeDataconnect = await createStripeCustomer(body.email)
+    // console.log(stripeDataconnect.id)
 
-    await updateCustomer(
-      { id: user.id },
-      { otp: user.otp, stripe_id: stripeDataconnect.id }
-    )
+    // await updateCustomer(
+    //   { id: user.id },
+    //   { otp: user.otp, stripe_id: stripeDataconnect.id }
+    // )
 
     user = await getCustomer({ id: user.id })
 
@@ -241,7 +241,10 @@ export default class CoustomerService {
     let user = await getCustomer({ id: body.id })
 
     let receiverUser = await getCustomer({
-      account_number: body.mobile_Account_number
+      where: [
+        { account_number: ILike(`%${body.mobile_Account_number}%`) },
+        { phone: ILike(`%${body.mobile_Account_number}%`) }
+      ]
     })
 
     if (!user) throw new AppError(400, 'User not Found')
@@ -261,41 +264,55 @@ export default class CoustomerService {
 
         let userAccount = user.account_number
 
+        let transectionHistory = {
+          account_number: userAccount,
+          amount: body.amount,
+          payment_type: body.Type,
+          transection_type: body.For,
+          recever_customer_account_number: body.mobile_Account_number,
+          customer_id: body.id
+        }
+
+        let userAmount = user.total_amount
+
+        async function updateTransectionAmount (
+          user: any,
+          amount: any
+        ): Promise<void> {
+          await updateCustomer({ id: user }, { total_amount: amount })
+        }
+
         if (body.amount >= 1) {
-          let add = await addTransection({
-            account_number: userAccount,
-            amount: body.amount,
-            payment_type: body.Type,
-            transection_type: body.For,
-            recever_customer_account_number: body.mobile_Account_number,
-            customer_id: body.id
-          })
-
-          let userAmount = user.total_amount
-
           if (body.Type == Payment_type.CREDIT) {
             let afterCredit = userAmount - body.amount
             let receiverDeposit = receiverUser.total_amount + body.amount
-            await updateCustomer({ id: body.id }, { total_amount: afterCredit })
-            await updateCustomer(
-              { id: receiverUser.id },
-              { total_amount: receiverDeposit }
-            )
-          }
 
-          if (body.Type == Payment_type.DEPOSIT) {
-            let afterDeposit = userAccount + body.amount
-            let receiverCredit = receiverUser.total_amount - body.amount
-            await updateCustomer(
-              { id: body.id },
-              { total_amount: afterDeposit }
-            )
-            await updateCustomer(
-              { id: receiverUser.id },
-              { total_amount: receiverCredit }
-            )
+            await updateTransectionAmount(body.id, afterCredit)
+            await updateTransectionAmount(receiverUser.id, receiverDeposit)
+
+            if (afterCredit) {
+              transectionHistory['amount'] = -body.amount
+              let add = await addTransection({
+                ...transectionHistory
+              })
+              transetion.push(add)
+            }
           }
-          transetion.push(add)
+          // if (body.Type == Payment_type.DEPOSIT) {
+          //   let afterDeposit = userAccount + body.amount
+          //   let receiverCredit = receiverUser.total_amount - body.amount
+
+          //   await updateCustomer(
+          //     { id: body.id },
+          //     { total_amount: afterDeposit }
+          //   )
+          //   await updateCustomer(
+          //     { id: receiverUser.id },
+          //     { total_amount: receiverCredit }
+          //   )
+          // }
+        } else {
+          throw new AppError(400, 'Amount not provided')
         }
       }
     } else {

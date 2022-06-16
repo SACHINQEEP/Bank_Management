@@ -41,9 +41,15 @@ export class Payment {
   @IsString()
   pin_code: string
 
-  @ValidateIf(o => o.For == TransetionType.CARD)
+  @ValidateIf(o => o.For == TransetionType.UPI)
   @Expose()
-  @IsDefined()
+  @IsOptional()
   @IsString()
   OTP: string
+
+  @ValidateIf(o => o.For == TransetionType.SEND_MONEY)
+  @Expose()
+  @IsString()
+  @IsDefined()
+  email: string
 }
