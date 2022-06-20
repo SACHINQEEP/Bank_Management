@@ -91,11 +91,13 @@ export default class CustomerController {
     return this.coustomerservic.updateCustomerProfile({ id, file })
   }
 
+  @Security('authorization')
   @Post('/create-transetion')
   public async createPayment (@Body() body: Payment): Promise<Transection> {
     return this.coustomerservic.createPayment(body)
   }
 
+  @Security('authorization')
   @Post('/request-money')
   public async requestMoney (@Body() body: Payment): Promise<Transection> {
     return this.coustomerservic.requestMoney(body)

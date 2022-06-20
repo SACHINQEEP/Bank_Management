@@ -147,6 +147,7 @@ CoustomerRouter.post(
 CoustomerRouter.post(
   '/update-user-profile/:id',
   upladUserPhoto,
+  checkJWTCS,
   async (req, res) => {
     try {
       const param: any = req.params.id
@@ -168,7 +169,7 @@ CoustomerRouter.post(
   }
 )
 
-CoustomerRouter.post('/create-transetion', async (req, res) => {
+CoustomerRouter.post('/create-transetion', checkJWTCS, async (req, res) => {
   try {
     let responce = await controller.createPayment(req.body)
 
