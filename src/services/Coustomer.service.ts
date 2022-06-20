@@ -38,6 +38,7 @@ import {
   randomotp,
   verifyPassword
 } from '../utils/util'
+import { Deposits } from '../entity/Deposit_Transecton'
 
 const mailService = new EmailService()
 
@@ -231,7 +232,10 @@ export default class CoustomerService {
     return user
   }
 
-  public async createPayment (body: Payment): Promise<Transection> {
+  public async createPayment (
+    body: Payment,
+    deposit: Deposits
+  ): Promise<Transection> {
     let receiverAccountNumber: any
     let transetion: any = []
 

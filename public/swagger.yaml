@@ -705,7 +705,9 @@ paths:
                                 $ref: '#/components/schemas/Transection'
             tags:
                 - Customer
-            security: []
+            security:
+                -
+                    authorization: []
             parameters: []
             requestBody:
                 required: true
@@ -725,7 +727,9 @@ paths:
                                 $ref: '#/components/schemas/Transection'
             tags:
                 - Customer
-            security: []
+            security:
+                -
+                    authorization: []
             parameters: []
             requestBody:
                 required: true
