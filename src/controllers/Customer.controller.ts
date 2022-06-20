@@ -95,4 +95,9 @@ export default class CustomerController {
   public async createPayment (@Body() body: Payment): Promise<Transection> {
     return this.coustomerservic.createPayment(body)
   }
+
+  @Post('/request-money')
+  public async requestMoney (@Body() body: Payment): Promise<Transection> {
+    return this.coustomerservic.requestMoney(body)
+  }
 }

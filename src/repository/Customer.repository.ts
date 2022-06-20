@@ -10,6 +10,10 @@ export const getCustomer = async (id: any): Promise<Customer> => {
   return await repo().findOneByOrFail(id)
 }
 
+export const getUser = async (payload: any): Promise<Customer> => {
+  return await repo().findOne({ ...payload })
+}
+
 export const getDetails = async (id: any): Promise<Customer> => {
   return await repo().findOne({
     where: { id: id },

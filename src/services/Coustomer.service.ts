@@ -25,6 +25,7 @@ import {
   getCustomer,
   getDetails,
   getTransection,
+  getUser,
   updateCustomer
 } from '../repository/Customer.repository'
 import {
@@ -59,10 +60,7 @@ export default class CoustomerService {
     // const stripeDataconnect = await createStripeCustomer(body.email)
     // console.log(stripeDataconnect.id)
 
-    // await updateCustomer(
-    //   { id: user.id },
-    //   { otp: user.otp, stripe_id: stripeDataconnect.id }
-    // )
+    await updateCustomer({ id: user.id }, { otp: user.otp })
 
     user = await getCustomer({ id: user.id })
 
@@ -217,7 +215,6 @@ export default class CoustomerService {
 
   public async updateCustomerProfile (body: any): Promise<Customer> {
     let user = await getCustomer({ id: body.id })
-    console.log(user)
 
     if (!user) throw new AppError(400, 'User not found')
 
@@ -240,17 +237,20 @@ export default class CoustomerService {
 
     let user = await getCustomer({ id: body.id })
 
-    let receiverUser = await getCustomer({
+    let receiverUser = await getUser({
+      // account_number: body.mobile_Account_number
       where: [
         { account_number: ILike(`%${body.mobile_Account_number}%`) },
         { phone: ILike(`%${body.mobile_Account_number}%`) }
       ]
     })
 
+    console.log('receiver', receiverUser)
+
     if (!user) throw new AppError(400, 'User not Found')
 
     if (user || user.total_amount >= 1) {
-      if (body.For == TransetionType.UPI) {
+      if (body.For == TransetionType.SEND_MONEY) {
         receiverAccountNumber = await getCustomer({
           account_number: body.mobile_Account_number
         })
@@ -319,5 +319,43 @@ export default class CoustomerService {
       throw new AppError(400, 'insufficient funds')
     }
     return transetion
+  }
+
+  public async requestMoney (body: Payment): Promise<Transection> {
+    let user = await getCustomer({ id: body.id })
+    let RequestUser = await getCustomer({
+      email: body.email
+    })
+    let result: any = []
+    console.log(body)
+
+    console.log('user', user)
+    console.log('RequestUser', RequestUser)
+
+    if (!user || !RequestUser) throw new Error('User Not Found')
+
+    let otp = randomotp()
+
+    if (body.For == TransetionType.REQUEST_MONEY) {
+      if (body.amount >= 1) {
+        await updateCustomer({ id: RequestUser.id }, { otp: otp })
+
+        console.log('hello there')
+        await mailService.receive(Event.EMAIL, Subject.RequestMoney, {
+          name: RequestUser.name,
+          userName: user.name,
+          email: body.email,
+          account_number: user.account_number,
+          amount: body.amount,
+          otp: otp
+        })
+      }
+
+      let responce: any = 'Money Request Successfull Send'
+
+      return responce
+    } else {
+      throw new AppError(400, 'Not Request Type')
+    }
   }
 }

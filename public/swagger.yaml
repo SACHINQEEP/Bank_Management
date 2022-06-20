@@ -290,6 +290,8 @@ components:
             enum:
                 - Payment_UPI
                 - Payment_CARD
+                - Send_Money
+                - Request_Money
             type: string
         Payment_type:
             enum:
@@ -314,6 +316,8 @@ components:
                     type: string
                 OTP:
                     type: string
+                email:
+                    type: string
             required:
                 - id
                 - For
@@ -322,6 +326,7 @@ components:
                 - amount
                 - pin_code
                 - OTP
+                - email
             type: object
             additionalProperties: false
         Department:
@@ -691,6 +696,26 @@ paths:
     /customer/create-transetion:
         post:
             operationId: CreatePayment
+            responses:
+                '200':
+                    description: Ok
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/Transection'
+            tags:
+                - Customer
+            security: []
+            parameters: []
+            requestBody:
+                required: true
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/Payment'
+    /customer/request-money:
+        post:
+            operationId: RequestMoney
             responses:
                 '200':
                     description: Ok

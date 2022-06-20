@@ -184,4 +184,20 @@ CoustomerRouter.post('/create-transetion', async (req, res) => {
   }
 })
 
+CoustomerRouter.post('/request-money', async (req, res) => {
+  try {
+    let responce = await controller.requestMoney(req.body)
+
+    return res.status(200).json({
+      status: 'Success',
+      data: responce
+    })
+  } catch (err) {
+    return res.status(400).json({
+      status: 'Fail',
+      message: err.message
+    })
+  }
+})
+
 export default CoustomerRouter
