@@ -39,6 +39,9 @@ import {
   verifyPassword
 } from '../utils/util'
 import { Deposits } from '../entity/Deposit_Transecton'
+import { RequestedMoney } from '../interface/Request/RequestedMoney'
+import { getDeposits } from '../repository/DepositTraRepo'
+import { response } from 'express'
 
 const mailService = new EmailService()
 
@@ -233,8 +236,8 @@ export default class CoustomerService {
   }
 
   public async createPayment (
-    body: Payment,
-    deposit: Deposits
+    body: Payment
+    // deposit: Deposits
   ): Promise<Transection> {
     let receiverAccountNumber: any
     let transetion: any = []
@@ -361,5 +364,66 @@ export default class CoustomerService {
     } else {
       throw new AppError(400, 'Not Request Type')
     }
+  }
+
+  public async transeferRequestedMoney (
+    body: RequestedMoney
+  ): Promise<Transection> {
+    let user = await getCustomer({ id: body.id })
+    console.log(user)
+
+    let creditTransection = {
+      customer_id: user.id,
+      account_number: body.account_number,
+      transection_type: TransetionType.REQUEST_MONEY,
+      recever_customer_account_number: body.account_number,
+      payment_type: Payment_type.CREDIT,
+      amount: body.amount
+    }
+
+    let receiverUser = await getUser({
+      where: [{ account_number: ILike(`%${body.account_number}`) }]
+    })
+
+    if (!user || !receiverUser) throw new AppError(400, 'User not Found')
+
+    // let otp = user.otp
+
+    // if (body.verifyOTP !== otp) {
+    //   throw new AppError(400, 'Invalid OTP')
+    // }
+
+    await updateCustomer({ id: user.id }, { otp: null })
+    let userAmount = user.total_amount
+    let recAmount = receiverUser.total_amount
+
+    let creditAmount = userAmount - body.amount
+    console.log('CreditAmount', creditAmount)
+    let depositAmount = recAmount + body.amount
+    console.log('depositAmount', depositAmount)
+
+    await updateCustomer({ id: user.id }, { total_amount: creditAmount })
+    await updateCustomer(
+      { id: receiverUser.id },
+      { total_amount: depositAmount }
+    )
+
+    if (creditAmount) {
+      creditTransection['amount'] = -body.amount
+      await addTransection({
+        ...creditTransection
+      })
+    }
+
+    if (depositAmount) {
+      creditTransection['payment_type'] = Payment_type.DEPOSIT
+      creditTransection['amount'] = body.amount
+      await getDeposits({
+        ...creditTransection
+      })
+    }
+
+    let response: any = 'Transection Done'
+    return response
   }
 }

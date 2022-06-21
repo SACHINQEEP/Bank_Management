@@ -23,6 +23,7 @@ import * as express from 'express'
 import { Payment } from '../interface/Request/PaymentPayload'
 import { Transection } from '../entity/Transection'
 import { ITransection } from '../interface/Responce/ITransection'
+import { RequestedMoney } from '../interface/Request/RequestedMoney'
 @Route('/customer')
 @Tags('Customer')
 export default class CustomerController {
@@ -101,5 +102,13 @@ export default class CustomerController {
   @Post('/request-money')
   public async requestMoney (@Body() body: Payment): Promise<Transection> {
     return this.coustomerservic.requestMoney(body)
+  }
+
+  // @Security('authorization')
+  @Post('/create-request-money-transection')
+  public async createRequestMoneyTransection (
+    @Body() body: RequestedMoney
+  ): Promise<Transection> {
+    return this.coustomerservic.transeferRequestedMoney(body)
   }
 }

@@ -38,7 +38,7 @@ export class Payment {
   @IsDefined()
   mobile_Account_number: string
 
-  @Expose() @IsString() @IsDefined() amount: number
+  @Expose() @IsNumber() @IsDefined() amount: number
 
   @ValidateIf(o => o.For == TransetionType.SEND_MONEY)
   @Expose()

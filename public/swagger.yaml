@@ -329,6 +329,28 @@ components:
                 - email
             type: object
             additionalProperties: false
+        RequestedMoney:
+            properties:
+                id:
+                    type: number
+                    format: double
+                account_number:
+                    type: string
+                verifyOTP:
+                    type: string
+                amount:
+                    type: number
+                    format: double
+                pin_code:
+                    type: string
+            required:
+                - id
+                - account_number
+                - verifyOTP
+                - amount
+                - pin_code
+            type: object
+            additionalProperties: false
         Department:
             properties:
                 department_id: {}
@@ -737,6 +759,26 @@ paths:
                     application/json:
                         schema:
                             $ref: '#/components/schemas/Payment'
+    /customer/create-request-money-transection:
+        post:
+            operationId: CreateRequestMoneyTransection
+            responses:
+                '200':
+                    description: Ok
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/Transection'
+            tags:
+                - Customer
+            security: []
+            parameters: []
+            requestBody:
+                required: true
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/RequestedMoney'
     /bank-department:
         post:
             operationId: AddDepartment

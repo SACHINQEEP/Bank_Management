@@ -201,4 +201,20 @@ CoustomerRouter.post('/request-money', async (req, res) => {
   }
 })
 
+CoustomerRouter.post('/create-request-money-transection', async (req, res) => {
+  try {
+    let responce = await controller.createRequestMoneyTransection(req.body)
+
+    return res.status(200).json({
+      status: 'Success',
+      data: responce
+    })
+  } catch (err) {
+    return res.status(400).json({
+      status: 'Fail',
+      message: err.message
+    })
+  }
+})
+
 export default CoustomerRouter
