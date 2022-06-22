@@ -61,7 +61,7 @@ export class Deposits extends BaseEntity {
 
   @ManyToOne(
     () => Customer,
-    customer => customer.transection_id
+    customer => customer.deposit_id
   )
   @JoinColumn({ name: 'customer_id' })
   customer_id: Customer

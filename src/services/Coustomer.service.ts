@@ -334,10 +334,6 @@ export default class CoustomerService {
       email: body.email
     })
     let result: any = []
-    console.log(body)
-
-    console.log('user', user)
-    console.log('RequestUser', RequestUser)
 
     if (!user || !RequestUser) throw new Error('User Not Found')
 
@@ -347,7 +343,6 @@ export default class CoustomerService {
       if (body.amount >= 1) {
         await updateCustomer({ id: RequestUser.id }, { otp: otp })
 
-        console.log('hello there')
         await mailService.receive(Event.EMAIL, Subject.RequestMoney, {
           name: RequestUser.name,
           userName: user.name,
@@ -370,37 +365,34 @@ export default class CoustomerService {
     body: RequestedMoney
   ): Promise<Transection> {
     let user = await getCustomer({ id: body.id })
-    console.log(user)
+
+    let receiverUser = await getUser({
+      where: [{ account_number: ILike(`%${body.account_number}`) }]
+    })
 
     let creditTransection = {
       customer_id: user.id,
-      account_number: body.account_number,
+      account_number: user.account_number,
       transection_type: TransetionType.REQUEST_MONEY,
       recever_customer_account_number: body.account_number,
       payment_type: Payment_type.CREDIT,
       amount: body.amount
     }
 
-    let receiverUser = await getUser({
-      where: [{ account_number: ILike(`%${body.account_number}`) }]
-    })
-
     if (!user || !receiverUser) throw new AppError(400, 'User not Found')
 
-    // let otp = user.otp
+    let otp = user.otp
 
-    // if (body.verifyOTP !== otp) {
-    //   throw new AppError(400, 'Invalid OTP')
-    // }
+    if (body.verifyOTP !== otp) {
+      throw new AppError(400, 'Invalid OTP')
+    }
 
     await updateCustomer({ id: user.id }, { otp: null })
     let userAmount = user.total_amount
     let recAmount = receiverUser.total_amount
 
     let creditAmount = userAmount - body.amount
-    console.log('CreditAmount', creditAmount)
     let depositAmount = recAmount + body.amount
-    console.log('depositAmount', depositAmount)
 
     await updateCustomer({ id: user.id }, { total_amount: creditAmount })
     await updateCustomer(
@@ -416,6 +408,7 @@ export default class CoustomerService {
     }
 
     if (depositAmount) {
+      creditTransection['customer_id'] = receiverUser.id
       creditTransection['payment_type'] = Payment_type.DEPOSIT
       creditTransection['amount'] = body.amount
       await getDeposits({

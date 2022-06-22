@@ -52,6 +52,6 @@ export const getTransection = async (body: any): Promise<[Customer[], any]> => {
       'account_number',
       'total_amount'
     ],
-    relations: ['transection_id']
+    relations: ['transection_id', 'deposit_id']
   })
 }

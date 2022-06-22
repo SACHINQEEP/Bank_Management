@@ -114,6 +114,10 @@ components:
                     items:
                         $ref: '#/components/schemas/Transection'
                     type: array
+                deposit_id:
+                    items:
+                        $ref: '#/components/schemas/Deposits'
+                    type: array
             required:
                 - id
                 - name
@@ -131,9 +135,47 @@ components:
                 - account_pincode
                 - account_id
                 - transection_id
+                - deposit_id
             type: object
             additionalProperties: false
         Transection:
+            properties:
+                id:
+                    type: number
+                    format: double
+                account_number:
+                    type: string
+                amount:
+                    type: number
+                    format: double
+                payment_type:
+                    type: string
+                loan_id:
+                    type: string
+                transection_type:
+                    type: string
+                recever_customer_account_number:
+                    type: string
+                recever_customer_mobile_number:
+                    type: string
+                createdAt:
+                    type: string
+                customer_id:
+                    $ref: '#/components/schemas/Customer'
+            required:
+                - id
+                - account_number
+                - amount
+                - payment_type
+                - loan_id
+                - transection_type
+                - recever_customer_account_number
+                - recever_customer_mobile_number
+                - createdAt
+                - customer_id
+            type: object
+            additionalProperties: false
+        Deposits:
             properties:
                 id:
                     type: number

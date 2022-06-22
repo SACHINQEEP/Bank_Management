@@ -8,6 +8,7 @@ import {
 } from 'typeorm'
 import { BaseEntry } from '../utils/BaseEntry'
 import { Accounts } from './Accounts'
+import { Deposits } from './Deposit_Transecton'
 import { Transection } from './Transection'
 
 @Entity()
@@ -37,4 +38,13 @@ export class Customer extends BaseEntry {
     name: 'transection_id'
   })
   transection_id: Transection[]
+
+  @OneToMany(
+    () => Deposits,
+    deposit => deposit.customer_id
+  )
+  @JoinColumn({
+    name: 'deposit_id'
+  })
+  deposit_id: Deposits[]
 }
