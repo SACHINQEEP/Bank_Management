@@ -34,15 +34,10 @@ export const updateCustomer = async (
   return await repo().update({ ...user }, { ...body })
 }
 
-export const getTransection = async (body: any): Promise<[Customer[], any]> => {
-  return repo().findAndCount({
+export const getTransection = async (body: any): Promise<Customer> => {
+  return repo().findOne({
     where: {
       id: body.id
-    },
-    skip: body.offset ? body.offset : 0,
-    take: body.limit ? body.limit : 10,
-    order: {
-      id: 'DESC'
     },
     select: [
       'id',

@@ -119,9 +119,9 @@ export default class CoustomerService {
     return user
   }
 
-  public async checkTransection (body: IUser): Promise<[Customer[], any]> {
+  public async checkTransection (body: IUser): Promise<Customer> {
     let users = await getTransection(body)
-    console.log(users)
+    if (!users) throw new AppError(400, 'User Not Found')
 
     return users
   }

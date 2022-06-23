@@ -689,9 +689,7 @@ paths:
                     content:
                         application/json:
                             schema:
-                                items:
-                                    $ref: '#/components/schemas/Customer'
-                                type: array
+                                $ref: '#/components/schemas/Customer'
             tags:
                 - Customer
             security:
