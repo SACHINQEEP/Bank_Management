@@ -3,5 +3,6 @@ export enum Subject {
   UserAccount = 2,
   ForgotPassword = 'ForgotPassword',
   SendOTPWhenLogin = 'SendOTPWhenLogin',
-  RequestMoney = 'RequestMoney'
+  RequestMoney = 'RequestMoney',
+  RequestMoneyTransection = 'RequestMoneyTransection'
 }

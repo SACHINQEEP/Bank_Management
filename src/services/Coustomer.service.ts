@@ -416,7 +416,15 @@ export default class CoustomerService {
       })
     }
 
-    let response: any = 'Transection Done'
+    await mailService.receive(Event.EMAIL, Subject.ForgotPassword, {
+      name: receiverUser.name,
+      account: body.amount,
+      account_number: body.account_number,
+      email: receiverUser.email
+    })
+
+    let response: any = 'Transection Successfully complited'
+
     return response
   }
 }

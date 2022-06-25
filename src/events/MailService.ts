@@ -4,7 +4,7 @@ import { Event } from './Event'
 import Receive from './Receive'
 import { Subject } from './Subject'
 import { sendMail } from '../utils/util'
-import userAccount from '../template/createAccountTemp'
+import { userAccount, TransectionHistory } from '../template/createAccountTemp'
 import RequestMoney from '../template/RequestMoney'
 
 export default class EmailService implements Receive {
@@ -36,6 +36,14 @@ export default class EmailService implements Receive {
           data.otp
         )
         break
+
+      case Subject.RequestMoneyTransection:
+        emailSubject = 'Requested Money Transection History'
+        emailHtml = TransectionHistory(
+          data.name,
+          data.account,
+          data.account_number
+        )
     }
 
     await sendMail(data.email, emailSubject, emailHtml)
