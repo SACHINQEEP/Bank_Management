@@ -42,6 +42,7 @@ import { Deposits } from '../entity/Deposit_Transecton'
 import { RequestedMoney } from '../interface/Request/RequestedMoney'
 import { getDeposits } from '../repository/DepositTraRepo'
 import { response } from 'express'
+import { requestLoan } from '../interface/Request/RequestLoan'
 
 const mailService = new EmailService()
 
@@ -427,4 +428,6 @@ export default class CoustomerService {
 
     return response
   }
+
+  public async requestLoan (body: requestLoan): Promise<void> {}
 }
