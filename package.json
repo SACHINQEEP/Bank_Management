@@ -38,6 +38,7 @@
     "stripe": "^9.8.0",
     "swagger-ui-express": "^4.4.0",
     "tsoa": "^4.1.0",
+    "twilio": "^3.77.3",
     "typeorm": "0.3.6"
   },
   "scripts": {
@@ -47,7 +48,9 @@
     "swagger": "tsoa swagger routes"
   },
   "nodemonConfig": {
-    "watch": ["src"],
+    "watch": [
+      "src"
+    ],
     "ext": "ts",
     "exec": "ts-node src/index.ts"
   }

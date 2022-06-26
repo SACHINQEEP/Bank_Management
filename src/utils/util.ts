@@ -3,6 +3,7 @@ import * as nodemailer from 'nodemailer'
 import { google } from 'googleapis'
 import * as argon from 'argon2'
 import service from '../config/app_config'
+import { Twilio } from 'twilio'
 
 export const jwtWebToken = function (id: any): string {
   const token = jwt.sign({ id }, service.token_secret_key, {
@@ -56,6 +57,28 @@ export async function sendMail (
     console.log(err)
     console.log(err.message)
   }
+}
+
+const accountSid = service.twilio_account_sid
+const authToken = service.twilio_auth_token
+const twilioNumber = service.twilio_phone_number
+const myNumber = service.my_number
+
+const client = new Twilio(accountSid, authToken)
+
+export async function notification (
+  receiverNumber: string,
+  subject: string,
+  body: string
+) {
+  client.messages
+    .create({
+      from: twilioNumber,
+      to: receiverNumber,
+      messagingServiceSid: subject,
+      body
+    })
+    .then(message => console.log(message.sid))
 }
 
 // export const rendomOTP = Math.floor(Math.random() * 9999 + 1);

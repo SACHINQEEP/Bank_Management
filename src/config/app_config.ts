@@ -23,6 +23,13 @@ const TOKEN_SECRET_KEY = process.env.SECRATE_KEY || 'TewaKzIgQLFmQXV4WCa6'
 const EXPIRE_IN = process.env.EXPIRE_IN || '1h'
 const PORT = process.env.PORT || 8000
 
+// Notifications
+
+const TWILIO_ACCOUNT_SID = process.env.TWILIO_ACCOUNT_SID
+const TWILIO_AUTH_TOKEN = process.env.TWILIO_AUTH_TOKEN
+const TWILIO_PHONE_NUMBER = process.env.TWILIO_PHONE_NUMBER
+const MY_NUMBER = process.env.MY_NUMBER
+
 const service = {
   client_id: CLIENT_ID,
   client_secret: CLIENT_SECRET,
@@ -35,7 +42,12 @@ const service = {
   expire_in: EXPIRE_IN,
   port: PORT,
 
-  stripe_key: STRIPE_KEY
+  stripe_key: STRIPE_KEY,
+
+  twilio_account_sid: TWILIO_ACCOUNT_SID,
+  twilio_auth_token: TWILIO_AUTH_TOKEN,
+  twilio_phone_number: TWILIO_PHONE_NUMBER,
+  my_number: MY_NUMBER
 }
 
 export default service
