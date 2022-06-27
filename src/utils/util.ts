@@ -66,16 +66,12 @@ const myNumber = service.my_number
 
 const client = new Twilio(accountSid, authToken)
 
-export async function notification (
-  receiverNumber: string,
-  subject: string,
-  body: string
-) {
+export async function notification (receiverNumber: string, body: string) {
   client.messages
     .create({
       from: twilioNumber,
       to: receiverNumber,
-      messagingServiceSid: subject,
+      messagingServiceSid: 'MG0b99e3e1e50a99f52abe4e2ec511a3ce',
       body
     })
     .then(message => console.log(message.sid))

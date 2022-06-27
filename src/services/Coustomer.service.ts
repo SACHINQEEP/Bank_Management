@@ -35,6 +35,7 @@ import {
 import {
   hasPassword,
   jwtWebToken,
+  notification,
   randomotp,
   verifyPassword
 } from '../utils/util'
@@ -43,6 +44,11 @@ import { RequestedMoney } from '../interface/Request/RequestedMoney'
 import { getDeposits } from '../repository/DepositTraRepo'
 import { response } from 'express'
 import { requestLoan } from '../interface/Request/RequestLoan'
+import service from '../config/app_config'
+import { LoanType } from '../eumn/LoanType'
+import { getEmployee } from '../repository/Employee.repository'
+import { Employees } from '../entity/Employee'
+import { getBranch } from '../repository/Branch.repository'
 
 const mailService = new EmailService()
 
@@ -61,6 +67,10 @@ export default class CoustomerService {
     user.otp = OTP
 
     await mailService.receive(Event.EMAIL, Subject.UserSignup, user)
+
+    const message = `Kindly Verify your account ${OTP}`
+
+    await notification(service.my_number, message)
 
     // const stripeDataconnect = await createStripeCustomer(body.email)
     // console.log(stripeDataconnect.id)
@@ -429,5 +439,40 @@ export default class CoustomerService {
     return response
   }
 
-  public async requestLoan (body: requestLoan): Promise<void> {}
+  public async requestLoan (
+    body: requestLoan,
+    employee: Employees
+  ): Promise<void> {
+    let user = await getCustomer({ id: body.id })
+
+    let branch = await getBranch({ id: user.branch_id })
+
+    let admin = employee.name
+
+    if (!user) throw new AppError(400, 'Not a Valid User')
+
+    if (
+      LoanType.BIKE_LOAN ||
+      LoanType.CAR_LOAN ||
+      LoanType.HOME_LOAN ||
+      LoanType.CASH_ADVANCES_LOAN ||
+      LoanType.PAYDAY_LOAN ||
+      LoanType.PERSONAL_LOAN ||
+      LoanType.SMALL_BUSINESS_LOAN
+    ) {
+      if (user.email == body.email_id) {
+        await mailService.receive(Event.EMAIL, Subject.RequestLoan, {
+          email: employee.email,
+          admin: admin,
+          id: branch,
+          branch_name: branch,
+          branch_address: branch.branch_location,
+          loan_type: body.For,
+          user_name: user.name,
+          user_number: user.phone,
+          user_ac: user.account_number
+        })
+      }
+    }
+  }
 }
