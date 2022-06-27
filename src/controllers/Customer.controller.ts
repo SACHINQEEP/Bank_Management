@@ -24,6 +24,8 @@ import { Payment } from '../interface/Request/PaymentPayload'
 import { Transection } from '../entity/Transection'
 import { ITransection } from '../interface/Responce/ITransection'
 import { RequestedMoney } from '../interface/Request/RequestedMoney'
+import { requestLoan } from '../interface/Request/RequestLoan'
+import { Employees } from '../entity/Employee'
 @Route('/customer')
 @Tags('Customer')
 export default class CustomerController {
@@ -110,5 +112,10 @@ export default class CustomerController {
     @Body() body: RequestedMoney
   ): Promise<Transection> {
     return this.coustomerservic.transeferRequestedMoney(body)
+  }
+
+  @Post('/request-loan')
+  public async requestLoan (@Body() body: requestLoan): Promise<void> {
+    return this.coustomerservic.requestLoan(body)
   }
 }

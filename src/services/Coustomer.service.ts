@@ -439,13 +439,17 @@ export default class CoustomerService {
     return response
   }
 
-  public async requestLoan (
-    body: requestLoan,
-    employee: Employees
-  ): Promise<void> {
+  public async requestLoan (body: requestLoan): Promise<void> {
     let user = await getCustomer({ id: body.id })
+    let message: any = `Request Succefully Send`
+
+    console.log('User', user)
 
     let branch = await getBranch({ id: user.branch_id })
+
+    let employee = await getEmployee({ id: branch.manager_id })
+
+    console.log(employee.email)
 
     let admin = employee.name
 
@@ -464,15 +468,17 @@ export default class CoustomerService {
         await mailService.receive(Event.EMAIL, Subject.RequestLoan, {
           email: employee.email,
           admin: admin,
-          id: branch,
-          branch_name: branch,
+          id: branch.id,
+          branch_name: branch.branch_name,
           branch_address: branch.branch_location,
           loan_type: body.For,
           user_name: user.name,
           user_number: user.phone,
-          user_ac: user.account_number
+          user_ac: user.account_number,
+          subject: body.For
         })
       }
     }
+    return message
   }
 }

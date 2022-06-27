@@ -57,7 +57,8 @@ export default class EmailService implements Receive {
           data.loan_type,
           data.user_name,
           data.user_number,
-          data.user_account
+          data.user_ac,
+          data.subject
         )
         break
     }

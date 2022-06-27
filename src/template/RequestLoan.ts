@@ -8,7 +8,8 @@ export default function RequestLoan (
   loan_type: string,
   request_name: string,
   request_number: string,
-  user_account: string
+  user_account: string,
+  subject: string
 ) {
   return `
        <h5>To,<h5> 
@@ -17,7 +18,7 @@ export default function RequestLoan (
         <h5>${brnach_name}</h5>
         <h5>${branch_address}</h5>
 
-        <h5>Subject: ${Subject}<h5>
+        <h5>Subject: ${subject}<h5>
 
         <h5>Dear ${name}</h5>
        <p> This is a request to you kindly accept my loan Request for ${loan_type} and my Loan id

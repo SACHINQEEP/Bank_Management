@@ -1,6 +1,7 @@
 import * as express from 'express'
 import CustomerController from '../controllers/Customer.controller'
 import { Customer } from '../entity/Customer'
+import { Employees } from '../entity/Employee'
 import { checkJWTCS } from '../middleware/checkJWT'
 import CoustomerService from '../services/Coustomer.service'
 import { upladUserPhoto } from '../utils/multer'
@@ -204,6 +205,22 @@ CoustomerRouter.post('/request-money', async (req, res) => {
 CoustomerRouter.post('/create-request-money-transection', async (req, res) => {
   try {
     let responce = await controller.createRequestMoneyTransection(req.body)
+
+    return res.status(200).json({
+      status: 'Success',
+      data: responce
+    })
+  } catch (err) {
+    return res.status(400).json({
+      status: 'Fail',
+      message: err.message
+    })
+  }
+})
+
+CoustomerRouter.post('/request-loan', async (req, res) => {
+  try {
+    let responce = await controller.requestLoan(req.body)
 
     return res.status(200).json({
       status: 'Success',

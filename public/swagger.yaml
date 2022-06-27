@@ -393,6 +393,41 @@ components:
                 - pin_code
             type: object
             additionalProperties: false
+        LoanType:
+            enum:
+                - Home_loan
+                - Personal_loan
+                - Bike_loan
+                - Car_loan
+                - Small_Business_loan
+                - Payday_loan
+                - Cash_Advances_loan
+            type: string
+        requestLoan:
+            properties:
+                id:
+                    type: number
+                    format: double
+                account_number:
+                    type: string
+                amount:
+                    type: number
+                    format: double
+                For:
+                    $ref: '#/components/schemas/LoanType'
+                email_id:
+                    type: string
+                mobile_number:
+                    type: string
+            required:
+                - id
+                - account_number
+                - amount
+                - For
+                - email_id
+                - mobile_number
+            type: object
+            additionalProperties: false
         Department:
             properties:
                 department_id: {}
@@ -819,6 +854,22 @@ paths:
                     application/json:
                         schema:
                             $ref: '#/components/schemas/RequestedMoney'
+    /customer/request-loan:
+        post:
+            operationId: RequestLoan
+            responses:
+                '204':
+                    description: 'No content'
+            tags:
+                - Customer
+            security: []
+            parameters: []
+            requestBody:
+                required: true
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/requestLoan'
     /bank-department:
         post:
             operationId: AddDepartment
