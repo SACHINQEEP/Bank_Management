@@ -49,6 +49,7 @@ import { LoanType } from '../eumn/LoanType'
 import { getEmployee } from '../repository/Employee.repository'
 import { Employees } from '../entity/Employee'
 import { getBranch } from '../repository/Branch.repository'
+import { createLoan } from '../repository/Loan.repository'
 
 const mailService = new EmailService()
 
@@ -443,13 +444,9 @@ export default class CoustomerService {
     let user = await getCustomer({ id: body.id })
     let message: any = `Request Succefully Send`
 
-    console.log('User', user)
-
     let branch = await getBranch({ id: user.branch_id })
 
     let employee = await getEmployee({ id: branch.manager_id })
-
-    console.log(employee.email)
 
     let admin = employee.name
 
@@ -464,7 +461,7 @@ export default class CoustomerService {
       LoanType.PERSONAL_LOAN ||
       LoanType.SMALL_BUSINESS_LOAN
     ) {
-      if (user.email == body.email_id) {
+      if (body.amount > 0) {
         await mailService.receive(Event.EMAIL, Subject.RequestLoan, {
           email: employee.email,
           admin: admin,
@@ -479,6 +476,13 @@ export default class CoustomerService {
         })
       }
     }
+
+    await createLoan({
+      amount_requested: body.amount,
+      loan_type: body.For,
+      ...body
+    })
+
     return message
   }
 }

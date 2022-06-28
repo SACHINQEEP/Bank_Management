@@ -9,6 +9,7 @@ import {
 import { BaseEntry } from '../utils/BaseEntry'
 import { Accounts } from './Accounts'
 import { Deposits } from './Deposit_Transecton'
+import { Loan } from './Loan'
 import { Transection } from './Transection'
 
 @Entity()
@@ -47,4 +48,10 @@ export class Customer extends BaseEntry {
     name: 'deposit_id'
   })
   deposit_id: Deposits[]
+
+  @OneToOne(() => Loan)
+  @JoinColumn({
+    name: 'loan_id'
+  })
+  loan_id: Loan[]
 }

@@ -118,6 +118,10 @@ components:
                     items:
                         $ref: '#/components/schemas/Deposits'
                     type: array
+                loan_id:
+                    items:
+                        $ref: '#/components/schemas/Loan'
+                    type: array
             required:
                 - id
                 - name
@@ -136,6 +140,7 @@ components:
                 - account_id
                 - transection_id
                 - deposit_id
+                - loan_id
             type: object
             additionalProperties: false
         Transection:
@@ -161,7 +166,9 @@ components:
                 createdAt:
                     type: string
                 customer_id:
-                    $ref: '#/components/schemas/Customer'
+                    items:
+                        $ref: '#/components/schemas/Customer'
+                    type: array
             required:
                 - id
                 - account_number
@@ -209,6 +216,123 @@ components:
                 - recever_customer_account_number
                 - recever_customer_mobile_number
                 - createdAt
+                - customer_id
+            type: object
+            additionalProperties: false
+        Loan:
+            properties:
+                loan_id:
+                    type: string
+                loan_type:
+                    type: string
+                first_name:
+                    type: string
+                last_name:
+                    type: string
+                family_details:
+                    properties:
+                        occupation:
+                            type: string
+                        mother_name:
+                            type: string
+                        father_name:
+                            type: string
+                    required:
+                        - occupation
+                        - mother_name
+                        - father_name
+                    type: object
+                branch_name:
+                    type: string
+                email_id:
+                    type: string
+                account_number:
+                    type: string
+                mobile_number:
+                    type: string
+                aadhar_card_number:
+                    type: string
+                pan_card_number:
+                    type: string
+                docs:
+                    properties:
+                        transection_history:
+                            type: string
+                        address_proof:
+                            type: string
+                        pan_card:
+                            type: string
+                        aadhar_card:
+                            type: string
+                    required:
+                        - transection_history
+                        - address_proof
+                        - pan_card
+                        - aadhar_card
+                    type: object
+                aadress:
+                    properties:
+                        state:
+                            type: string
+                        city:
+                            type: string
+                        pin_code:
+                            type: number
+                            format: double
+                        near_by:
+                            type: string
+                        line:
+                            type: string
+                    required:
+                        - state
+                        - city
+                        - pin_code
+                        - near_by
+                        - line
+                    type: object
+                amount_requested:
+                    type: number
+                    format: double
+                interest_rate:
+                    type: number
+                    format: double
+                loan_duration:
+                    type: string
+                start_date:
+                    type: string
+                    format: date-time
+                end_date:
+                    type: string
+                    format: date-time
+                time_period:
+                    type: string
+                    format: date-time
+                due_amount:
+                    type: number
+                    format: double
+                customer_id:
+                    $ref: '#/components/schemas/Customer'
+            required:
+                - loan_id
+                - loan_type
+                - first_name
+                - last_name
+                - family_details
+                - branch_name
+                - email_id
+                - account_number
+                - mobile_number
+                - aadhar_card_number
+                - pan_card_number
+                - docs
+                - aadress
+                - amount_requested
+                - interest_rate
+                - loan_duration
+                - start_date
+                - end_date
+                - time_period
+                - due_amount
                 - customer_id
             type: object
             additionalProperties: false

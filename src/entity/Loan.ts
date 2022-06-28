@@ -1,14 +1,34 @@
-import { BaseEntity, Column, Entity, PrimaryGeneratedColumn } from 'typeorm'
+import {
+  BaseEntity,
+  Column,
+  Entity,
+  JoinColumn,
+  OneToOne,
+  PrimaryGeneratedColumn
+} from 'typeorm'
+import { LoanType } from '../eumn/LoanType'
+import { Customer } from './Customer'
 
 @Entity()
 export class Loan extends BaseEntity {
   @PrimaryGeneratedColumn('uuid')
   loan_id: string
 
-  @Column()
+  @Column({
+    type: 'enum',
+    enum: LoanType,
+    default: LoanType.BIKE_LOAN
+  })
+  loan_type: string
+
+  @Column({
+    nullable: true
+  })
   first_name: string
 
-  @Column()
+  @Column({
+    nullable: true
+  })
   last_name: string
 
   @Column({
@@ -21,7 +41,9 @@ export class Loan extends BaseEntity {
     occupation: string
   }
 
-  @Column()
+  @Column({
+    nullable: true
+  })
   branch_name: string
 
   @Column({
@@ -29,16 +51,24 @@ export class Loan extends BaseEntity {
   })
   email_id: string
 
-  @Column()
+  @Column({
+    nullable: true
+  })
   account_number: string
 
-  @Column()
+  @Column({
+    nullable: true
+  })
   mobile_number: string
 
-  @Column()
+  @Column({
+    nullable: true
+  })
   aadhar_card_number: string
 
-  @Column()
+  @Column({
+    nullable: true
+  })
   pan_card_number: string
 
   @Column({
@@ -64,24 +94,44 @@ export class Loan extends BaseEntity {
     state: string
   }
 
-  @Column()
+  @Column({
+    nullable: true
+  })
   amount_requested: number
 
-  @Column()
+  @Column({
+    nullable: true
+  })
   interest_rate: number
 
-  @Column()
+  @Column({
+    nullable: true
+  })
   loan_duration: string
 
-  @Column()
+  @Column({
+    nullable: true
+  })
   start_date: Date
 
-  @Column()
+  @Column({
+    nullable: true
+  })
   end_date: Date
 
-  @Column()
+  @Column({
+    nullable: true
+  })
   time_period: Date
 
-  @Column()
+  @Column({
+    nullable: true
+  })
   due_amount: number
+
+  @OneToOne(() => Customer)
+  @JoinColumn({
+    name: 'customer_id'
+  })
+  customer_id: Customer
 }

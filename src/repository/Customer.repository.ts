@@ -17,7 +17,7 @@ export const getUser = async (payload: any): Promise<Customer> => {
 export const getDetails = async (id: any): Promise<Customer> => {
   return await repo().findOne({
     where: { id: id },
-    relations: ['account_id']
+    relations: ['account_id', 'loan_id']
   })
 }
 

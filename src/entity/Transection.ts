@@ -64,5 +64,5 @@ export class Transection extends BaseEntity {
     customer => customer.transection_id
   )
   @JoinColumn({ name: 'customer_id' })
-  customer_id: Customer
+  customer_id: Customer[]
 }
