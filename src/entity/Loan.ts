@@ -129,6 +129,9 @@ export class Loan extends BaseEntity {
   })
   due_amount: number
 
+  @Column()
+  update_at: Date
+
   @OneToOne(() => Customer)
   @JoinColumn({
     name: 'customer_id'

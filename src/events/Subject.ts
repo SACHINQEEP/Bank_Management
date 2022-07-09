@@ -5,5 +5,6 @@ export enum Subject {
   SendOTPWhenLogin = 'SendOTPWhenLogin',
   RequestMoney = 'RequestMoney',
   RequestMoneyTransection = 'RequestMoneyTransection',
-  RequestLoan = 'RequestLoan'
+  RequestLoan = 'RequestLoan',
+  DocumentTagging = 'documentTagging'
 }

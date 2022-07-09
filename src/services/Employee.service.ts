@@ -18,6 +18,7 @@ import { Event } from '../events/Event'
 import { Subject } from '../events/Subject'
 import { VerifyOTP } from '../interface/Request/VerifyOTP'
 import { Employees } from '../entity/Employee'
+import { DocumnetTagging } from '../interface/Request/DocTagging.Payload'
 
 const mailService = new EmailService()
 
@@ -107,5 +108,28 @@ export default class EmployeeService {
     }
 
     throw new AppError(400, 'Account number already exist')
+  }
+
+  public async documentTagging (body: DocumnetTagging): Promise<void> {
+    let { loan_id } = body
+
+    let user = await getCustomer({ loan_id })
+
+    if (!user) throw new AppError(400, 'No loan requested!...')
+
+    let amount = user.total_amount
+
+    if (amount < 5000) {
+      throw new AppError(
+        400,
+        'You are not valid for the loan due to loan amount in your account'
+      )
+    } else {
+      let name = user.name
+
+      await updateCustomer({ id: user.id }, { update_at: new Date() })
+
+      mailService.receive(Event.EMAIL, Subject.DocumentTagging, { name })
+    }
   }
 }

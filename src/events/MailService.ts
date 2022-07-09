@@ -1,5 +1,5 @@
 import forgotpassword from '../template/forgotpassword'
-import signupMail from '../template/welComeMail'
+import { signupMail, documentVerification } from '../template/welComeMail'
 import { Event } from './Event'
 import Receive from './Receive'
 import { Subject } from './Subject'
@@ -60,6 +60,11 @@ export default class EmailService implements Receive {
           data.user_ac,
           data.subject
         )
+        break
+
+      case Subject.DocumentTagging:
+        emailSubject = 'Document Verification'
+        emailHtml = documentVerification(data.name)
         break
     }
 
